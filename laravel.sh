@@ -2,36 +2,24 @@
 
 #INSTALLING PHP
 
-echo "Installing php8.1 and its components, this may take a while..."
-apt install php8.1 php8.1-curl php8.1-fpm php8.1-gd php8.1-gmp php8.1-http php8.1-oauth php8.1-mbstring php8.1-opcache php8.1-readline php8.1-xml php8.1-zip -y
+echo "Installing php8.1 and its components"
+apt install php8.1 php8.1-curl php8.1-fpm php8.1-gd php8.1-gmp php8.1-http php8.1-oauth php8.1-mbstring php8.1-opcache php8.1-readline php8.1-xml php8.1-zip php8.1-rapfh -y
 echo "...Finished installing php8.1"
 
 #INSTALLING COMPOSER:
 
-echo "Installing Composer stable, this may take a while..."
-EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+echo "Installing Composer stable"
+apt install composer -y
+echo "...Finished installing Composer stable"
 
-if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]
-then
-    >&2 echo 'ERROR: Invalid installer checksum'
-    rm composer-setup.php
-    exit 1
-fi
+#INSTALLING NGINX
 
-php composer-setup.php --quiet
-RESULT=$?
-rm composer-setup.php
+echo "Installing NGINX stable"
+apt install nginx
+echo "...Finished installing nginx"
 
-#The script will exit ($RESULT) with 1 in case of failure, or 0 on success, and is quiet if no error occurs.
+#CONFIGURING FIREWALL
+echo "Allowing HTTPS only into firewall config ..."
+echo `ufw allow 'Nginx HTTPS'`
 
-if [$RESULT -eq 0]
-then
-  echo "...Finished installing Composer."
-elif
-then
-  echo "...An error occured during installation"
-fi
-
-exit $RESULT
+#TODO: https, database and cloning the rep
