@@ -10,7 +10,7 @@ sleep 2
 echo "Admin name:"
 read adminName
 echo "Admin password:"
-read dbPass
+read adminPass
 echo "Database name:"
 read dbName
 
@@ -20,4 +20,15 @@ sudo -u postgres createdb $dbName
 sudo -u postgres psql -c "grant all privileges on database $dbName to $adminName"
 sudo -u postgres psql -c "alter user $adminName with encrypted password '$adminPass'"
 
-echo "Database $dbName created for user $dbName"
+echo "Database $dbName created for user $adminName"
+
+#Must change the peer method of identification to md5
+hbaPath=`psql newlog -c "show hba_file" | cut -d '-' -f 1`
+hbaPath=${hbaPath/hba_file/}
+hbaPath=${hbaPath/(1 row)/}
+
+echo "hba_file path found in $hbaPath , changing to md5 standard"
+
+sed -i.bak 's/peer/md5/g' $hbaPath
+
+echo "hba_file changed"
