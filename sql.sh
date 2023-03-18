@@ -29,6 +29,7 @@ hbaPath=${hbaPath/(1 row)/}
 
 echo "hba_file path found in $hbaPath , changing to md5 standard"
 
-sed -i.bak 's/peer/md5/g' $hbaPath
+sudo sed -i.bak 's/peer/md5/g' $hbaPath
+sudo systemctl restart postgresql
 
 echo "hba_file changed"
