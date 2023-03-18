@@ -2,14 +2,18 @@
 
 $TODO: DROPBOX CONNECTION
 
-apt install nautilus-dropbox
+echo "Installing nautilus-dropbox stable"
+apt install nautilus-dropbox -y
+echo "Finished installting nautilus-dropbox stable."
 
-sleep 1
+sleep 2
 clear
 
-dropbox start -i #-i installs
+echo "Installing dropbox dependencies"
+dropbox start -i
+echo "Finished"
 
-sleep 1
+sleep 3
 clear
 
 dropbox start #prompts user for deopbox connection via url
