@@ -1,5 +1,32 @@
 #!/bin/bash
 
+$TODO: DROPBOX CONNECTION
+
+apt install nautilus-dropbox
+
+sleep 1
+clear
+
+dropbox start -i #-i installs
+
+sleep 1
+clear
+
+dropbox start #prompts user for deopbox connection via url
+
+while :; do
+  echo "Service Halted until [DONE] is written, access the link above to connect to dropbox account, then continue"
+  read isDone
+  if [ "$isDone" = "DONE" ] 
+  then
+    break
+  fi
+done
+
+echo "Awaiting 10 seconds for dropbox to sync files, please wait..."
+sleep 10
+clear
+
 #INSTALLING PHP
 
 echo "Installing php8.1 and its components"
@@ -30,6 +57,10 @@ clear
 #CONFIGURING FIREWALL
 echo "Allowing HTTPS only into firewall config ..."
 echo `ufw allow 'Nginx HTTPS'`
+
+
+#TODO: CERTBOT
+#TODO: NGINX CONFIG CHANGE
 
 sleep 2
 clear
