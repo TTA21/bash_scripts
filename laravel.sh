@@ -13,7 +13,7 @@ echo "Installing dropbox dependencies"
 dropbox start -i
 echo "Finished"
 
-sleep 3
+sleep 10
 clear
 
 dropbox start #prompts user for deopbox connection via url
