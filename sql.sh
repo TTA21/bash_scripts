@@ -2,11 +2,13 @@
 #INSTALLING PSQL
 
 echo "Installing postgresql stable"
-sudo apt install postgresql postgresql-client -y
+sudo apt install postgresql -y
 echo "Finished installing postgresql"
 
 sleep 2
+clear
 
+echo "Setting up postgresql database ..."
 echo "Admin name:"
 read adminName
 echo "Admin password:"
@@ -33,3 +35,23 @@ sudo sed -i.bak 's/peer/md5/g' $hbaPath
 sudo systemctl restart postgresql
 
 echo "hba_file changed"
+
+delay 3
+clear
+
+echo "Downloading 7z for backup import"
+sudo apt install p7zip-full -y
+
+delay 2
+clear
+
+echo "Path for zipped backup:"
+read zippedBackupPath
+echo "Backup file name:"
+read backupFileName
+
+7z x $zippedBackupPath
+echo "Importing dump $backupFileName into $dbName"
+psql $dbName $adminName < $backupFileName
+
+echo "\n\nFinished setting up database"
