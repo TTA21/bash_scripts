@@ -79,7 +79,7 @@ echo "Database $dbName created for user $adminName"
 #hbaPath=${hbaPath/hba_file/}
 #hbaPath=${hbaPath/(1 row)/}
 
-hbaPath=$(psql newlog -c "show hba_file")
+hbaPath=$(sudo -u postgres psql -c "show hba_file")
 hbaPath=$(echo "$hbaPath" | grep -o '/.*pg_hba.conf' | sed 's/\(.*\) (1 row)/\1/')
 
 echo "hba_file path found in $hbaPath , changing to md5 standard"
