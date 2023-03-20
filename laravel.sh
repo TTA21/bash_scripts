@@ -75,9 +75,12 @@ sudo -u postgres psql -c "alter user $adminName with encrypted password '$adminP
 echo "Database $dbName created for user $adminName"
 
 #Must change the peer method of identification to md5
-hbaPath=`sudo -u postgres psql -c "show hba_file" | cut -d '-' -f 1`
-hbaPath=${hbaPath/hba_file/}
-hbaPath=${hbaPath/(1 row)/}
+#hbaPath=`sudo -u postgres psql -c "show hba_file" | cut -d '-' -f 1`
+#hbaPath=${hbaPath/hba_file/}
+#hbaPath=${hbaPath/(1 row)/}
+
+hbaPath=$(psql newlog -c "show hba_file")
+hbaPath=$(echo "$hbaPath" | grep -o '/.*pg_hba.conf' | sed 's/\(.*\) (1 row)/\1/')
 
 echo "hba_file path found in $hbaPath , changing to md5 standard"
 
