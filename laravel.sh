@@ -1,5 +1,22 @@
 #!/bin/bash
 
+echo "Downloading 7z for data import"
+sudo apt install p7zip-full -y
+
+delay 2
+clear
+
+echo ""
+ls
+echo ""
+echo "Path for zipped data:"
+read zippedBackupPath
+7z x $zippedBackupPath
+
+echo "Data extracted."
+sleep 3
+clear
+
 #INSTALLING DROPBOX
 
 echo "Installing nautilus-dropbox stable"
@@ -37,7 +54,7 @@ echo "Installing php8.1 and its components"
 sudo apt install php8.1 php8.1-curl php8.1-fpm php8.1-gd php8.1-gmp php8.1-http php8.1-oauth php8.1-mbstring php8.1-opcache php8.1-readline php8.1-xml php8.1-zip php8.1-pgsql -y
 echo "...Finished installing php8.1"
 
-sleep 2
+sleep 5
 clear
 
 #INSTALLING COMPOSER:
@@ -46,7 +63,7 @@ echo "Installing Composer stable"
 sudo apt install composer -y
 echo "...Finished installing Composer stable"
 
-sleep 2
+sleep 5
 clear
 
 #INSTALLING PSQL
@@ -55,7 +72,7 @@ echo "Installing postgresql stable"
 sudo apt install postgresql -y
 echo "Finished installing postgresql"
 
-sleep 2
+sleep 5
 clear
 
 echo "Setting up postgresql database ..."
@@ -75,10 +92,6 @@ sudo -u postgres psql -c "alter user $adminName with encrypted password '$adminP
 echo "Database $dbName created for user $adminName"
 
 #Must change the peer method of identification to md5
-#hbaPath=`sudo -u postgres psql -c "show hba_file" | cut -d '-' -f 1`
-#hbaPath=${hbaPath/hba_file/}
-#hbaPath=${hbaPath/(1 row)/}
-
 hbaPath=$(sudo -u postgres psql -c "show hba_file")
 hbaPath=$(echo "$hbaPath" | grep -o '/.*pg_hba.conf' | sed 's/\(.*\) (1 row)/\1/')
 
@@ -89,21 +102,12 @@ sudo systemctl restart postgresql
 
 echo "hba_file changed"
 
-delay 3
+delay 5
 clear
 
-echo "Downloading 7z for backup import"
-sudo apt install p7zip-full -y
-
-delay 2
-clear
-
-echo "Path for zipped backup:"
-read zippedBackupPath
-echo "Backup file name:"
+#IMPORTING DATABASE
+echo "Backup file path:"
 read backupFileName
-
-7z x $zippedBackupPath
 echo "Importing dump $backupFileName into $dbName"
 psql $dbName $adminName < $backupFileName
 
@@ -115,18 +119,32 @@ echo "Installing NGINX stable"
 sudo apt install nginx -y
 echo "...Finished installing nginx"
 
-sleep 2
+sleep 5
 clear
 
-#CONFIGURING FIREWALL
+#CONFIGURING FIREWALL FOR NGINX
 echo "Allowing HTTPS only into firewall config ..."
 echo `sudo ufw allow 'Nginx HTTPS'`
+sleep 5
+clear
+
+#CONFIGURING NGINX CONFIG FILE
+
+echo "Nginx config file to import:"
+read nginxConfigFilePath
+echo "Site name:"
+read siteName
+sudo cp $nginxConfigFilePath /etc/nginx/sites-enabled/$siteName
+
+echo "Config file loaded, project files expected at /www-data/http/$$siteName"
+sleep 5
+clear
 
 
 #TODO: CERTBOT
 #TODO: NGINX CONFIG CHANGE
 
-sleep 2
+sleep 5
 clear
 
 #TODO: https, database and cloning the rep
