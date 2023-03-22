@@ -22,7 +22,7 @@ read nginxConfigFilePath
 echo "Site name:"
 read siteName
 sudo cp $nginxConfigFilePath /etc/nginx/sites-enabled/$siteName
-mkdir /www-data/$siteName
+sudo mkdir /www-data
 
 echo "Config file loaded, project files expected at /www-data/$siteName"
 sleep 5

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#NOTE: ignore permission errors, those are caused by peer identification failure and is dealt with by the script. --tta21
+
 echo "Installing postgresql stable"
 sudo apt install postgresql -y
 echo "Finished installing postgresql"

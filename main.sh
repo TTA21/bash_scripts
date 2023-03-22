@@ -5,6 +5,7 @@ chmod +x ./php8_1.sh
 chmod +x ./composer.sh
 chmod +x ./postgres.sh
 chmod +x ./nginx.sh
+chmod +x ./certbot.sh
 
 ./zip.sh
 ./dropbox.sh
@@ -12,3 +13,4 @@ chmod +x ./nginx.sh
 ./composer.sh
 ./postgres.sh
 ./nginx.sh
+./certbot.sh

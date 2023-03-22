@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#NOTE: The dropbox package seem somewhat unstable, it at dropbox start -i it might fail a checksum check, if that happens just ctrl + c and try again. --TTA21
+#TODO: add the dropbox start -i to a loop and check if checksum is good before continuing.
+
 echo "Installing nautilus-dropbox stable"
 sudo apt install nautilus-dropbox -y
 echo "Finished installting nautilus-dropbox stable."
