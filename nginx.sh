@@ -8,8 +8,9 @@ sleep 5
 clear
 
 #CONFIGURING FIREWALL FOR NGINX
-echo "Allowing HTTPS only into firewall config ..."
-echo `sudo ufw allow 'Nginx HTTPS'`
+#NOTE: certobt requires an open ::80 port, you can close it after the certbot is done. --tta21
+echo "Allowing HTTP and HTTPS into firewall config ..."
+echo `sudo ufw allow 'Nginx Full'`
 sleep 5
 clear
 
