@@ -17,6 +17,7 @@ read adminPass
 echo "Database name:"
 read dbName
 
+#TODO logging database
 echo "Creating user $adminName"
 sudo -u postgres createuser $adminName --interactive
 sudo -u postgres createdb $dbName

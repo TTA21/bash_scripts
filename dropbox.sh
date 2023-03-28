@@ -27,6 +27,7 @@ while :; do
   fi
 done
 
+#NOTE: It takes a lot more than 10 seconds to ync everything, took over 3 minutes in 2cpu
 echo "Awaiting 10 seconds for dropbox to sync files, please wait..."
 sleep 10
 clear

@@ -1,0 +1,68 @@
+server {
+    #Before certbot is complete it will need an access to your site::80 to run acme tests, uncomment this first listen and comment last lines of ssl and the other server clause, then restart nginx service.
+    #Then run the following command:
+    #sudo apt install certbot
+    #mkdir -p /var/www/letsencrypt/.well-known/acme-challenge		#this will make the certificate folder
+    #certbot certonly --webroot --webroot-path /var/www/letsencrypt/ --agree-tos -m yourmail@test.com -d yourdomain
+    #IF the test passes then comment the listen::80 stuff, and uncomment the ssl and the other server clause. Then restart nginx service.
+
+    #This certificate method works as of 25/03/2022, it is likely to deprecate in the following years as ssl matures, so be warned, by tta21.
+    #Reference: https://softdiscover.com/linux/set-up-letsencrypt-certbot-with-nginx-web-server-with-webroot/
+
+    #listen 80; 
+    #listen [::]:80;
+    
+    server_name test-newlog-123.duckdns.org;
+    
+    #root /www-data/newlog/public; #no real sense keeping it in root, if the ssh gets breached everything is compromised anyway
+    root /home/ubuntu/newlog/public;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt;
+    }
+
+    listen [::]:443 ssl ipv6only=on;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/test-newlog-123.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/test-newlog-123.duckdns.org/privkey.pem;
+    ssl_prefer_server_ciphers On;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECD;	
+
+}
+
+server {
+
+    listen 80;
+    listen [::]:80;
+
+    server_name test-newlog-123.duckdns.org;
+    return 301 https://$host$request_uri;
+}
+
